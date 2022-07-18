@@ -16,24 +16,23 @@ import java.util.Map;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-
-public class HeloWorldControllerTest {
+public class CountryCurrencyControllerTests {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
 	private JwtManager jwtManager;
-
+    
     @Test
     public void stage1_isUnauthorized() throws Exception {
         this.mockMvc
         .perform(
-            get("/api/helo")
+            get("/api/country/SG")
         )
         .andExpect(status().isUnauthorized());
     }
 
     @Test
-    public void stage2_isAuthorized() throws Exception {
+    public void stage2_isAuthorized_and_Success() throws Exception {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", "ajii");
         claims.put("roles", "USER");
@@ -43,14 +42,14 @@ public class HeloWorldControllerTest {
 
         this.mockMvc
             .perform(
-                get("/api/helo").header("Authorization", "Bearer " + token)
+                get("/api/country/USA").header("Authorization", "Bearer " + token)
             )
             .andExpect(status().isOk());
         
     }
 
     @Test
-    public void stage3_RateLimit() throws Exception {
+    public void stage3_isAuthorized_and_NotFound() throws Exception {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", "ajii");
         claims.put("roles", "USER");
@@ -58,19 +57,11 @@ public class HeloWorldControllerTest {
         String subject = "ajii";
         String token = jwtManager.generateToken(claims, subject);
 
-        // Capacity access 30 per minutes
-        for (int i=0; i<29; i++) {
-            this.mockMvc
-                .perform(
-                    get("/api/helo").header("Authorization", "Bearer " + token)
-                )
-                .andExpect(status().isOk());
-        }
         this.mockMvc
             .perform(
-                get("/api/helo").header("Authorization", "Bearer " + token)
+                get("/api/country/ASD").header("Authorization", "Bearer " + token)
             )
-            .andExpect(status().isTooManyRequests());
+            .andExpect(status().isNotFound());
+        
     }
-    
 }

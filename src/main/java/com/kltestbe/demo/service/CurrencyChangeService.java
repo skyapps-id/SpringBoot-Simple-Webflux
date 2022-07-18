@@ -1,6 +1,7 @@
 package com.kltestbe.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,10 +15,13 @@ public class CurrencyChangeService {
     @Autowired
     WebClient webClient;
 
+	@Value("${app.api.apilayer}")
+	private String apiKey;
+
     public Mono<CurrencyChangeApi> getCurrencyChange(String src) {
         return webClient.get()
             .uri("https://api.apilayer.com/currency_data/change?source={src}&currencies=IDR", src)
-            .header("apikey", "ioFwhu4B1DLbgvrpFED8hhc8f2e5F65I")
+            .header("apikey", apiKey)
             .retrieve()
             .onStatus(
                 HttpStatus.UNAUTHORIZED::equals,

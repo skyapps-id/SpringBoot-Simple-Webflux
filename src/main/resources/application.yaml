@@ -19,3 +19,5 @@ app:
     private-key-passphrase: testing123
     keystore-location: keys/keystore.jks
     keystore-password: testing123
+  api:
+    apilayer: MjgVMZX80YrxmLivxwlnnZpE04PvNhB1

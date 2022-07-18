@@ -36,7 +36,7 @@ public class LogCurrency implements Serializable{
     @Column(name = "search", nullable = false, length = 500)
 	private String search;
 
-    @Column(name = "full_name", nullable = false, unique = true)
+    @Column(name = "full_name", nullable = false,length = 500)
 	private String fullName;
 
     @Column(name = "population", nullable = false, length = 500)
